@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ t('Compare prices') }} · LibreLeaf{% endblock %}
+{% block content %}
+<section class="page-intro shell"><p class="eyebrow">{{ t('ISBN-first comparison') }}</p><h1>{{ t('Find the edition.') }}<br>{{ t('Compare its price.') }}</h1><p>{{ t('For the most precise result, search by ISBN. You can also enter a title and LibreLeaf will resolve one edition before comparing prices.') }}</p></section>
+<section class="shell search-strip">
+  <form method="get" action="{{ url_for('compare') }}">
+    <input name="q" value="{{ query }}" placeholder="{{ t('ISBN-10, ISBN-13, or book title') }}" required maxlength="200" aria-label="{{ t('ISBN preferred · or book title') }}">
+    <select name="market" aria-label="Market"><option value="BR" {{ 'selected' if market == 'BR' }}>{{ t('Brazil') }}</option><option value="US" {{ 'selected' if market == 'US' }}>{{ t('United States') }}</option><option value="AR" {{ 'selected' if market == 'AR' }}>{{ t('Argentina') }}</option></select>
+    <input name="postcode" value="{{ postcode }}" placeholder="{{ t('Postcode / ZIP') }}" maxlength="16" aria-label="{{ t('Postcode / ZIP') }}">
+    <button type="submit">{{ t('Compare') }}</button>
+  </form>
+</section>
+{% if error %}<div class="shell alert error">{{ error }}</div>{% endif %}
+{% if result %}
+<section class="shell result-summary"><div><p class="eyebrow">{{ t('Title matched to') if resolution == 'title' else t('ISBN resolved as') }} {{ result.isbn13 }}</p><h2>{{ result.offers|length }} {{ t('verified price in') if result.offers|length == 1 else t('verified prices in') }} {{ result.market }}</h2></div><p>{{ t('Checked') }} {{ result.compared_at.strftime('%Y-%m-%d %H:%M UTC') }}</p></section>
+{% if result.book %}
+<section class="shell edition-card">
+  <div class="edition-cover">{% if result.book.cover_url %}<img src="{{ result.book.cover_url }}" alt="Cover of {{ result.book.title }}">{% else %}<span>ISBN<br>{{ result.book.isbn13 }}</span>{% endif %}</div>
+  <div><p class="eyebrow">{{ t('Edition selected from your title') if resolution == 'title' else t('Book found from your ISBN') }}</p><h2>{{ result.book.title }}</h2><p class="edition-byline">{{ result.book.authors|join(', ') or t('Author not supplied') }}</p><dl><div><dt>{{ t('Publisher') }}</dt><dd>{{ result.book.publisher or t('Unknown') }}</dd></div><div><dt>{{ t('Published') }}</dt><dd>{{ result.book.publish_date or t('Unknown') }}</dd></div><div><dt>{{ t('Exact ISBN') }}</dt><dd>{{ result.book.isbn13 }}</dd></div></dl><a href="{{ result.book.information_url }}" rel="noopener">{{ t('View book details') }} ↗</a></div>
+</section>
+{% else %}<div class="shell alert">{{ t('The ISBN is valid, but no edition metadata was found.') }}</div>{% endif %}
+{% if result.offers %}
+<section class="shell table-wrap"><table><thead><tr><th>{{ t('Store') }}</th><th>{{ t('Edition') }}</th><th>{{ t('Price') }}</th><th>{{ t('Shipping') }}</th><th>{{ t('Known total') }}</th><th>{{ t('Action') }}</th></tr></thead><tbody>
+  {% for offer in result.offers %}<tr><td><strong>{{ offer.provider }}</strong><small>{{ offer.seller or t('Seller not supplied') }}</small></td><td>{{ offer.book_format }}<small>{{ offer.condition }}</small></td><td class="amount">{{ money(offer.item_price_minor, offer.currency, lang) }}</td><td>{{ money(offer.shipping_minor, offer.currency, lang) }}</td><td class="amount">{{ money(offer.total_minor, offer.currency, lang) }}</td><td><a href="{{ offer.purchase_url }}" rel="noopener">{{ t('View offer') }} ↗</a></td></tr>{% else %}<tr><td colspan="6">{{ t('No matching offers were found for this edition.') }}</td></tr>{% endfor %}
+</tbody></table></section>
+{% else %}<section class="shell no-offers"><p class="eyebrow">{{ t('No verified live price') }}</p><h2>{{ t('The edition was checked, but no active exact-ISBN offer was found.') }}</h2><p>{{ t('This is common for older or imported editions. LibreLeaf will not substitute a different edition merely because its title looks similar.') }}</p></section>{% endif %}
+{% endif %}
+{% endblock %}

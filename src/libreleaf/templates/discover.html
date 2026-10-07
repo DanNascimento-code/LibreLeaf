@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ t('Discover') }} · LibreLeaf{% endblock %}
+{% block content %}
+<section class="page-intro shell"><p class="eyebrow">{{ t('Explore books') }}</p><h1>{{ t('Find a book, then choose the edition.') }}</h1><p>{{ t('Search by title, author, subject, or keywords. Confirm the ISBN before comparing prices.') }}</p></section>
+<section class="shell search-strip">
+  <form method="get" action="{{ url_for('discover') }}">
+    <input name="q" value="{{ query }}" placeholder="{{ t('Title, author, subject, or keywords') }}" required maxlength="200" aria-label="Book query">
+    <select name="market" aria-label="Market"><option value="BR" {{ 'selected' if market == 'BR' }}>{{ t('Brazil') }}</option><option value="US" {{ 'selected' if market == 'US' }}>{{ t('United States') }}</option><option value="AR" {{ 'selected' if market == 'AR' }}>{{ t('Argentina') }}</option></select>
+    <select name="language" aria-label="Language"><option value="" {{ 'selected' if not language }}>{{ t('Any language') }}</option><option value="por" {{ 'selected' if language == 'por' }}>{{ t('Portuguese') }}</option><option value="eng" {{ 'selected' if language == 'eng' }}>{{ t('English') }}</option><option value="spa" {{ 'selected' if language == 'spa' }}>{{ t('Spanish') }}</option></select>
+    <button type="submit">{{ t('Search') }}</button>
+  </form>
+</section>
+{% if error %}<div class="shell alert error">{{ error }}</div>{% endif %}
+{% if books %}
+<section class="shell results-heading"><h2>{{ books|length }} {{ t('matching works') }}</h2><p>{{ t('Compare only after confirming the desired format and edition.') }}</p></section>
+<section class="shell book-grid">
+  {% for book in books %}
+  <article class="book-card">
+    <div class="cover-wrap">{% if book.cover_url %}<img src="{{ book.cover_url }}" alt="{{ book.title }}" loading="lazy">{% else %}<span>{{ t('No cover') }}</span>{% endif %}</div>
+    <div class="book-body"><p class="meta">{{ book.first_publish_year or t('Year unknown') }} · {{ book.edition_count }} {{ t('editions') }}</p><h2>{{ book.title }}</h2><p>{{ book.authors|join(', ') or t('Unknown author') }}</p><div class="tags"><span>{{ book.ebook_access }}</span>{% for language in book.languages[:3] %}<span>{{ language }}</span>{% endfor %}</div>
+      <div class="card-actions">{% if book.isbn13 %}<a class="button small" href="{{ url_for('compare') }}?isbn={{ book.isbn13 }}&market={{ market }}">{{ t('Compare') }} {{ book.isbn13 }}</a>{% endif %}<a href="{{ book.information_url }}" rel="noopener">{{ t('View book details') }} ↗</a></div>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% elif query and not error %}<div class="shell empty-state"><h2>{{ t('No results') }}</h2><p>{{ t('Try a broader title, author, or subject.') }}</p></div>{% endif %}
+{% endblock %}

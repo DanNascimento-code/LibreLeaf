@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ t('How it works') }} · LibreLeaf{% endblock %}
+{% block content %}
+<section class="page-intro shell"><p class="eyebrow">{{ t('Simple by design') }}</p><h1>{{ t('From a search to the right edition.') }}</h1><p>{{ t('LibreLeaf identifies the book, confirms its ISBN, compares matching offers, and keeps important differences visible.') }}</p></section>
+<section class="shell pipeline" aria-label="How LibreLeaf compares books">
+  <div><span>1</span><h2>{{ t('Search') }}</h2><p>{{ t('Start with a title or an ISBN.') }}</p></div><b>→</b>
+  <div><span>2</span><h2>{{ t('Identify') }}</h2><p>{{ t('Find the exact edition and confirm its ISBN.') }}</p></div><b>→</b>
+  <div><span>3</span><h2>{{ t('Compare') }}</h2><p>{{ t('Keep only offers that match that edition.') }}</p></div><b>→</b>
+  <div><span>4</span><h2>{{ t('Choose') }}</h2><p>{{ t('Review price, condition, shipping, and the original listing.') }}</p></div>
+</section>
+<section class="shell section principles"><article><h2>{{ t('Exact editions') }}</h2><p>{{ t('Books with similar titles are not treated as the same product. The ISBN must match.') }}</p></article><article><h2>{{ t('Honest totals') }}</h2><p>{{ t('Unknown shipping stays unknown instead of being presented as free.') }}</p></article><article><h2>{{ t('Visible differences') }}</h2><p>{{ t('New, used, printed, and digital editions remain clearly labeled.') }}</p></article><article><h2>{{ t('Original listings') }}</h2><p>{{ t('Every price links back to the bookstore so you can verify availability before buying.') }}</p></article></section>
+{% endblock %}

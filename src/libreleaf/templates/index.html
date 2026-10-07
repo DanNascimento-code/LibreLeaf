@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}LibreLeaf — {{ t('Compare prices') }}{% endblock %}
+{% block content %}
+<section class="hero shell">
+  <div class="hero-copy">
+    <p class="eyebrow">{{ t("A reader's index for the open web") }}</p>
+    <p class="hero-folio" aria-hidden="true">Vol. I · BR / US / AR</p>
+    <h1>{{ t('Find the book.') }}<br><em>{{ t('Compare the edition.') }}</em></h1>
+    <p class="lede">{{ t('Search preferably by ISBN for the most precise comparison. A title also works: LibreLeaf will identify one edition before checking verified offers.') }}</p>
+    <div class="hero-actions">
+      <a class="button" href="{{ url_for('discover') }}">{{ t('Explore books') }}</a>
+      <a class="button secondary" href="{{ url_for('architecture') }}">{{ t('How matching works') }}</a>
+    </div>
+  </div>
+  <div class="search-panel">
+    <span class="book-ribbon" aria-hidden="true"></span>
+    <p class="panel-label">{{ t('One search, one comparable edition') }}</p>
+    <form action="{{ url_for('compare') }}" method="get">
+      <label for="home-query">{{ t('ISBN preferred · or book title') }}</label>
+      <input id="home-query" name="q" placeholder="{{ t('e.g. 9786558380542 or book title') }}" required maxlength="200">
+      <p class="field-hint">{{ t('Why ISBN? It identifies the exact edition and prevents mismatched prices.') }}</p>
+      <div class="form-row">
+        <select name="market" aria-label="Market"><option value="BR" {{ 'selected' if default_market == 'BR' }}>{{ t('Brazil') }}</option><option value="US" {{ 'selected' if default_market == 'US' }}>{{ t('United States') }}</option><option value="AR" {{ 'selected' if default_market == 'AR' }}>{{ t('Argentina') }}</option></select>
+        <input name="postcode" placeholder="{{ t('Postcode / ZIP (optional)') }}" maxlength="16" aria-label="{{ t('Postcode / ZIP') }}">
+      </div>
+      <button type="submit">{{ t('Find and compare') }}</button>
+    </form>
+  </div>
+</section>
+
+<section class="shell section">
+  <div class="section-heading"><p class="eyebrow">{{ t('Three ways to explore') }}</p><h2>{{ t('One place for readers') }}</h2></div>
+  <div class="feature-grid">
+    <article class="feature"><span>01</span><h3>{{ t('Discover') }}</h3><p>{{ t('Search by title, author, subject, or ISBN and find the edition you want.') }}</p><a href="{{ url_for('discover') }}">{{ t('Find a book') }} →</a></article>
+    <article class="feature"><span>02</span><h3>{{ t('Compare') }}</h3><p>{{ t('See current offers for the same ISBN without mixing different editions.') }}</p><a href="{{ url_for('compare') }}">{{ t('Compare prices') }} →</a></article>
+    <article class="feature"><span>03</span><h3>{{ t('Read free') }}</h3><p>{{ t('Browse public-domain books with links to available reading formats.') }}</p><a href="{{ url_for('free_books') }}">{{ t('Browse free books') }} →</a></article>
+  </div>
+</section>
+
+<section class="ink-section">
+  <div class="shell two-column">
+    <div><p class="eyebrow light">{{ t('Edition-first comparison') }}</p><h2>{{ t('Compare the same book, not just the same title.') }}</h2><p>{{ t('LibreLeaf keeps the ISBN visible so you can confirm the exact edition before buying.') }}</p></div>
+    <div class="status-list">
+      <div class="status-row"><span>{{ t('Exact ISBN') }}</span><strong>{{ t('Always visible') }}</strong></div>
+      <div class="status-row"><span>{{ t('Book condition') }}</span><strong>{{ t('Clearly labeled') }}</strong></div>
+      <div class="status-row"><span>{{ t('Unknown shipping') }}</span><strong>{{ t('Never hidden') }}</strong></div>
+      <div class="status-row"><span>{{ t('Original listing') }}</span><strong>{{ t('One click away') }}</strong></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+# Virtual environment
+.venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+tmp/
+
+# Generated scraper output
+data/*.csv
+data/*.json
+data/*.db
+data/*.html
+
+# Draft documentation kept local until explicitly finalized
+docs/BEGINNER_GUIDE.md
+output/pdf/libreleaf-implementation-guide.pdf
+
+# Local credentials
+.env
+.vercel

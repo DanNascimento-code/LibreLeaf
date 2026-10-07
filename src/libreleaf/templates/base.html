@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ lang }}" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ t('Book discovery · Exact editions · Clear prices') }}">
+  <title>{% block title %}LibreLeaf{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
+  <script src="{{ url_for('static', path='/theme.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#content">{{ t('Skip to content') }}</a>
+  <header class="site-header">
+    <div class="header-inner shell">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="LibreLeaf">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span>LibreLeaf<small>{{ t('A field guide to books') }}</small></span>
+      </a>
+      <nav aria-label="{{ t('Primary navigation') }}">
+        <a href="{{ url_for('discover') }}" {% if request.url.path == '/discover' %}aria-current="page"{% endif %}>{{ t('Discover') }}</a>
+        <a href="{{ url_for('compare') }}" {% if request.url.path == '/compare' %}aria-current="page"{% endif %}>{{ t('Compare') }}</a>
+        <a href="{{ url_for('free_books') }}" {% if request.url.path == '/free-books' %}aria-current="page"{% endif %}>{{ t('Free books') }}</a>
+        <a href="{{ url_for('architecture') }}" {% if request.url.path == '/architecture' %}aria-current="page"{% endif %}>{{ t('How it works') }}</a>
+      </nav>
+      <div class="header-controls">
+        <div class="language-switcher" aria-label="Language">
+          <a href="{{ url_for('set_language', code='en') }}?next={{ request.url.path|urlencode }}" lang="en" {% if lang == 'en' %}aria-current="true"{% endif %}>EN</a>
+          <a href="{{ url_for('set_language', code='pt-BR') }}?next={{ request.url.path|urlencode }}" lang="pt-BR" {% if lang == 'pt-BR' %}aria-current="true"{% endif %}>PT</a>
+          <a href="{{ url_for('set_language', code='es-419') }}?next={{ request.url.path|urlencode }}" lang="es-419" {% if lang == 'es-419' %}aria-current="true"{% endif %}>ES</a>
+        </div>
+        <button class="theme-toggle" type="button" aria-label="{{ t('Switch color theme') }}" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">{{ t('Dark') }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="content">{% block content %}{% endblock %}</main>
+  <footer class="site-footer">
+    <div class="footer-inner shell">
+      <p><strong>LibreLeaf</strong><span>{{ t('Book discovery · Exact editions · Clear prices') }}</span></p>
+      <p class="footer-note">{{ t('Prices and availability can change.') }}<br>{{ t('Always verify the original offer.') }}</p>
+    </div>
+  </footer>
+</body>
+</html>

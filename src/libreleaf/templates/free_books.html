@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ t('Free books') }} · LibreLeaf{% endblock %}
+{% block content %}
+<section class="page-intro shell"><p class="eyebrow">{{ t('Books you can read freely') }}</p><h1>{{ t('Discover classics and public-domain works.') }}</h1><p>{{ t('Search Project Gutenberg and choose from the available reading formats. Copyright rules may differ by country.') }}</p></section>
+<section class="shell search-strip"><form method="get" action="{{ url_for('free_books') }}"><input name="q" value="{{ query }}" placeholder="{{ t('Search free books') }}" required maxlength="200" aria-label="Book query"><button type="submit">{{ t('Search books') }}</button></form></section>
+{% if not contact_ready and not error %}<div class="shell alert">{{ t('Free-book search is temporarily unavailable.') }}</div>{% endif %}
+{% if error %}<div class="shell alert error">{{ error }}</div>{% endif %}
+{% if page %}
+<section class="shell result-summary"><div><p class="eyebrow">{{ t('Search results') }}</p><h2>{{ page.books|length }} {{ t('free books') }}</h2></div><p>{{ t('Updated') }} {{ page.fetched_at.strftime('%Y-%m-%d %H:%M UTC') }}</p></section>
+<section class="shell book-grid">
+  {% for book in page.books %}<article class="book-card"><div class="cover-wrap">{% if book.cover_url %}<img src="{{ book.cover_url }}" alt="{{ book.title }}" loading="lazy">{% else %}<span>PG<br>#{{ book.gutenberg_id }}</span>{% endif %}</div><div class="book-body"><p class="meta">Project Gutenberg #{{ book.gutenberg_id }}</p><h2>{{ book.title }}</h2><p>{{ book.authors|join(', ') or t('Unknown author') }}</p><p class="summary">{{ book.summary or '' }}</p><div class="card-actions"><a href="{{ book.information_url }}" rel="noopener">{{ t('Catalog record') }} ↗</a>{% for link in book.downloads[:2] %}<a href="{{ link.url }}" rel="noopener">{{ link.media_type.split('/')[-1] }} ↗</a>{% endfor %}</div></div></article>{% endfor %}
+</section>
+{% if page.next_url %}<section class="shell pagination"><p>{{ t('More matching books are available.') }}</p><a class="button" href="{{ url_for('free_books') }}?q={{ query|urlencode }}&page_url={{ page.next_url|urlencode }}">{{ t('Show more books') }}</a></section>{% endif %}
+{% endif %}
+{% endblock %}
