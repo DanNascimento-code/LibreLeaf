@@ -4,7 +4,6 @@ from reportlab.lib.colors import HexColor
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen.canvas import Canvas
 
-
 WIDTH, HEIGHT = 1080, 1920
 OUTPUT = Path("output/pdf/libreleaf-linkedin-story.pdf")
 
@@ -23,7 +22,17 @@ def line(canvas: Canvas, text: str, x: float, y: float, size: int, color=CREAM, 
     canvas.drawString(x, y, text)
 
 
-def wrapped(canvas: Canvas, text: str, x: float, y: float, width: float, size: int, leading: int, color=MUTED, font="Helvetica") -> float:
+def wrapped(
+    canvas: Canvas,
+    text: str,
+    x: float,
+    y: float,
+    width: float,
+    size: int,
+    leading: int,
+    color=MUTED,
+    font="Helvetica",
+) -> float:
     words = text.split()
     rows: list[str] = []
     current = ""
@@ -49,7 +58,15 @@ def background(canvas: Canvas, page: int, label: str):
     canvas.setLineWidth(2)
     canvas.line(72, 1780, WIDTH - 72, 1780)
     line(canvas, "LIBRELEAF", 72, 1820, 24, GOLD, "Helvetica-Bold")
-    line(canvas, label.upper(), WIDTH - 72 - stringWidth(label.upper(), "Helvetica-Bold", 17), 1823, 17, MUTED, "Helvetica-Bold")
+    line(
+        canvas,
+        label.upper(),
+        WIDTH - 72 - stringWidth(label.upper(), "Helvetica-Bold", 17),
+        1823,
+        17,
+        MUTED,
+        "Helvetica-Bold",
+    )
     line(canvas, f"{page:02d} / 06", 72, 68, 16, MUTED, "Helvetica-Bold")
     canvas.setFillColor(GREEN)
     canvas.circle(WIDTH - 84, 79, 8, fill=1, stroke=0)
@@ -89,7 +106,8 @@ def build() -> None:
         canvas,
         "Ethical web scraping",
         ["A book price", "comparison engine"],
-        "LibreLeaf turns a title or ISBN into verified, edition-specific offers from public bookstore pages.",
+        "LibreLeaf turns a title or ISBN into verified, edition-specific offers "
+        "from public bookstore pages.",
     )
     pill(canvas, "PYTHON", 72, 930, 170)
     pill(canvas, "FASTAPI", 258, 930, 190)
@@ -110,17 +128,33 @@ def build() -> None:
         canvas,
         "Why this matters",
         ["The same title", "is not the same book."],
-        "Paperback, hardcover, translation, revision and eBook prices cannot be compared safely by title alone.",
+        "Paperback, hardcover, translation, revision and eBook prices cannot be "
+        "compared safely by title alone.",
     )
-    card(canvas, "01", "Identify", "Resolve the requested title or validate the submitted ISBN.", 900)
-    card(canvas, "02", "Verify", "Accept a store result only when its product data matches the exact ISBN.", 610)
-    card(canvas, "03", "Compare", "Normalize visible prices without hiding unknown shipping or condition.", 320)
+    card(
+        canvas, "01", "Identify", "Resolve the requested title or validate the submitted ISBN.", 900
+    )
+    card(
+        canvas,
+        "02",
+        "Verify",
+        "Accept a store result only when its product data matches the exact ISBN.",
+        610,
+    )
+    card(
+        canvas,
+        "03",
+        "Compare",
+        "Normalize visible prices without hiding unknown shipping or condition.",
+        320,
+    )
     canvas.showPage()
 
     background(canvas, 3, "The scraper")
     title(
         canvas,
-        "Inside the", "".split(),
+        "Inside the",
+        [],
         "",
     )
     line(canvas, "scraping pipeline", 72, 1449, 76, CREAM, "Helvetica-Bold")
@@ -150,7 +184,8 @@ def build() -> None:
         canvas,
         "Zero retailer keys",
         ["Public prices.", "Exact editions."],
-        "Sources are included only when LibreLeaf can return an actual price and verify the requested ISBN.",
+        "Sources are included only when LibreLeaf can return an actual price and "
+        "verify the requested ISBN.",
     )
     card(canvas, "BR", "Brazil", "Estante Virtual + Livraria da Vila", 900)
     card(canvas, "US", "United States", "ThriftBooks new and used offers", 610)
@@ -160,11 +195,17 @@ def build() -> None:
     background(canvas, 5, "Engineering")
     title(
         canvas,
-        "Built beyond", 
+        "Built beyond",
         ["a scraping script"],
-        "LibreLeaf is a deployable product with a tested service layer, web UI, CLI and responsible failure handling.",
+        "LibreLeaf is a deployable product with a tested service layer, web UI, "
+        "CLI and responsible failure handling.",
     )
-    metrics = [("51", "automated tests"), ("89%", "statement coverage"), ("3", "UI languages"), ("4", "live price sources")]
+    metrics = [
+        ("51", "automated tests"),
+        ("89%", "statement coverage"),
+        ("3", "UI languages"),
+        ("4", "live price sources"),
+    ]
     positions = [(72, 920), (555, 920), (72, 600), (555, 600)]
     for (value, label), (x, y) in zip(metrics, positions, strict=True):
         canvas.setFillColor(SURFACE)
@@ -182,7 +223,8 @@ def build() -> None:
         canvas,
         "Open source",
         ["Built for readers.", "Designed to grow."],
-        "A portfolio project focused on responsible collection, data integrity and a useful reader experience.",
+        "A portfolio project focused on responsible collection, data integrity "
+        "and a useful reader experience.",
     )
     canvas.setFillColor(SURFACE)
     canvas.roundRect(72, 910, WIDTH - 144, 190, 30, fill=1, stroke=0)
@@ -193,10 +235,20 @@ def build() -> None:
     canvas.roundRect(72, 680, WIDTH - 144, 190, 30, fill=1, stroke=0)
     line(canvas, "SOURCE CODE", 112, 800, 19, GREEN, "Helvetica-Bold")
     line(canvas, "github.com/DanNascimento-code/LibreLeaf", 112, 730, 29, CREAM, "Helvetica-Bold")
-    canvas.linkURL("https://github.com/DanNascimento-code/LibreLeaf", (72, 680, WIDTH - 72, 870), relative=0)
+    canvas.linkURL(
+        "https://github.com/DanNascimento-code/LibreLeaf", (72, 680, WIDTH - 72, 870), relative=0
+    )
     line(canvas, "Python · FastAPI · Beautiful Soup · SQLite · Jinja", 72, 550, 24, MUTED)
     line(canvas, "Dan Nascimento", 72, 390, 35, CREAM, "Helvetica-Bold")
-    line(canvas, "Software Development · Web Scraping · Data Products", 72, 342, 22, GOLD, "Helvetica-Bold")
+    line(
+        canvas,
+        "Software Development · Web Scraping · Data Products",
+        72,
+        342,
+        22,
+        GOLD,
+        "Helvetica-Bold",
+    )
     canvas.save()
 
 

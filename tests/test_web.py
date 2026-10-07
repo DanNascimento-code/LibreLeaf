@@ -173,6 +173,8 @@ def test_home_architecture_health_and_security_headers(client: FastAPI) -> None:
     assert "Find and compare" in home.text
     assert '<html lang="en" data-theme="dark">' in home.text
     assert "/static/theme.js" in home.text
+    assert "/static/libreleaf-logo.png" in home.text
+    assert 'rel="apple-touch-icon"' in home.text
     assert "Switch color theme" in home.text
     assert "frame-ancestors 'none'" in home.headers["content-security-policy"]
     assert "From a search to the right edition" in _get(client, "/architecture").text

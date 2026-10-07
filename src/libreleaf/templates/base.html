@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ t('Book discovery · Exact editions · Clear prices') }}">
   <title>{% block title %}LibreLeaf{% endblock %}</title>
-  <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ url_for('static', path='/libreleaf-logo.png') }}" type="image/png">
+  <link rel="apple-touch-icon" href="{{ url_for('static', path='/libreleaf-logo.png') }}">
+  <meta property="og:image" content="{{ request.url_for('static', path='/libreleaf-logo.png') }}">
   <script src="{{ url_for('static', path='/theme.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
 </head>
@@ -14,7 +16,7 @@
   <header class="site-header">
     <div class="header-inner shell">
       <a class="brand" href="{{ url_for('home') }}" aria-label="LibreLeaf">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <img class="brand-logo" src="{{ url_for('static', path='/libreleaf-logo.png') }}" alt="" width="44" height="44">
         <span>LibreLeaf<small>{{ t('A field guide to books') }}</small></span>
       </a>
       <nav aria-label="{{ t('Primary navigation') }}">

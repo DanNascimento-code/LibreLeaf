@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="output/images/libreleaf-linkedin-logo.png" alt="LibreLeaf open-book logo" width="180">
+</p>
+
 # LibreLeaf
 
 **Discover. Compare. Read.**
